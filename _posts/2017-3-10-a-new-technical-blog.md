@@ -1,3 +1,9 @@
+---
+title: A new technical blog - hello world!
+layout: post
+---
+
+
 # Hello world!
 
 Oh, hello there. If you've somehow stumbled here through the magic of hypertext, I'd like to welcome you to my humble technical blog.
