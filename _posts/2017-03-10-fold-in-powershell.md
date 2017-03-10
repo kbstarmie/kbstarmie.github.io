@@ -27,4 +27,15 @@ function foldl {
         & $f $baseValue $list
     }
 }
+
+function foldr {
+    param($baseValue, $f, $list)
+
+    if ($list.length -gt 0) {
+        & $f $list[0] (foldr -f $f -baseValue $baseValue -list $list[1..($list.length)])
+    } else {
+        $baseValue
+    }
+}
+
 ```
