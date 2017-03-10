@@ -4,7 +4,7 @@ layout: post
 ---
 
 
-# Hello world!
+# {{ page.title }}
 
 Oh, hello there. If you've somehow stumbled here through the magic of hypertext, I'd like to welcome you to my humble technical blog.
 
