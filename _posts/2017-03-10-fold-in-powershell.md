@@ -1,9 +1,19 @@
 ---
 layout: post
-title: Fold in Powershell
+title: Fold in PowerShell
 ---
 
 # {{ page.title }}
+
+As far as programming languages go, functional languages 
+
+Nevertheless, the concept of stateless processing is useful when structuring 
+
+PowerShell actually has a lot of functional structures that you can take advantage of. Map and filter are practically first-class citizens, with dedicated syntax and aliases to perform these operations over lists.
+
+However, one very notable omission is the fold.
+
+Having found it useful in my day to day activities, whether, I have this neat function sitting around.
 
 ```
 function foldl {
