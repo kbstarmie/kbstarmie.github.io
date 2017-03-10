@@ -1,6 +1,6 @@
 ---
 title: A new technical blog - hello world!
-layout: post
+layout: default
 ---
 
 
