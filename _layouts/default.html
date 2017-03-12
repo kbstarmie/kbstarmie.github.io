@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    {% if page.title %}
+    <title>{{ page.title }} &mdash; {{ site.title | default: site.github.repository_name }} with {{ site.github.owner_name }}</title>
+    {% else %}
     <title>{{ site.title | default: site.github.repository_name }} with {{ site.github.owner_name }}</title>
+    {% endif %}
 
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     <meta name="viewport" content="width=device-width">
