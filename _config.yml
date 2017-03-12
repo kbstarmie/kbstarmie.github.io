@@ -1,8 +1,8 @@
-title: Another day's work
-description: Recovering technology nerd working in IT. PowerShell, Systems Center, Windows administration.
+title: Working in IT
+description: Recovering technology addict still working in IT. PowerShell, Systems Center, infrastructure in a Windows world. Personally, I use Linux.
 theme: jekyll-theme-minimal
 twitter:
  url: https://twitter.com/kbstarmie
  username: "@kbstarmie"
 email: "mail@kbstarmie.io"
-pgp: 0x84ACE6C3 
+pgp: "0x84ACE6C3"
