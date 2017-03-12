@@ -99,7 +99,7 @@ foldl -baseValue $true -f {param($1,$2) $1.property -and $2.property} -list $som
 
 Obviously, you will need to ensure your objects have the right properties so the system doesn't complain, but it's a small price to pay for the convenience of a useful PowerShell helper function!
 
-I appreciate that some of this content might go right over some readers who haven't been acquainted with function programming fundamentals. In that case, I wholeheartedly recommend spending an afternoon or evening with [Learn You A Haskell For Great Good!](http://learnyouahaskell.com/) to be introduced to the basics. It's fun, trust me.
+I appreciate that some of this content might go right over some readers who haven't been acquainted with functional programming fundamentals. In that case, I wholeheartedly recommend spending an afternoon or evening with [Learn You A Haskell For Great Good!](http://learnyouahaskell.com/) to be introduced to the basics. It's fun, trust me.
 
 Anyway, I just wanted to introduce this small function and I hope that you all find it useful in your day to day data munging, scripting, or whatever! I've made a script [available in my PowerShell repository](https://github.com/kbstarmie/powershell-snippets/blob/master/functions/fold.ps1) if you're rushing to apply it to your profile loaded code.
 

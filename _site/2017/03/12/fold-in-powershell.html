@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Working in IT with </title>
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body style="margin:0; padding: 0;">
+  <div style="width:100%; height: 10px; background-color: #C2385F; position: fixed; top: 0;"></div>
+    <div class="wrapper" style="margin-top: 50px;">
+      <header>
+        <h1>Working in IT</h1>
+        <img src="/assets/picture.jpg" style="height:200px; width:200px; border-radius:100px; margin-bottom: 10px;" alt="Starmie in the deep by chuz0r - http://chuz0r.deviantart.com/art/Starmie-in-the-deep-384047289" />
+        <p>Recovering technology addict still working in IT. PowerShell, Systems Center, infrastructure in a Windows world. Personally, I use Linux.</p>
+
+        <p><img style="padding-right: 5px; width: 14px;height: 14px;" src="/assets/logos/twitter.svg"><a href="https://twitter.com/kbstarmie">@kbstarmie</a></p>
+        <p><img style="padding-right: 5px; width: 14px;height: 14px;" src="/assets/logos/github.svg"><span class='logo-github-small'></span> <a href="">kbstarmie</a></p>
+        <p><img style="padding-right: 5px; width: 14px;height: 14px;" src="/assets/logos/email.svg"> mail@kbstarmie.io</p>
+        <p><img style="padding-right: 5px; width: 14px;height: 14px;" src="/assets/logos/pgp.svg"> 0x84ACE6C3</a></p>
+
+        
+      </header>
+      <section>
+
+      <div id="post">
+<h1>Fold in PowerShell</h1>
+<h4>12 Mar 2017</h4>
+<p>Oftentimes, when working with data, you might find yourself needing to process or transform it in some way to continue. Duh, no kidding, you might say. Are you really writing a blog post about this? Run with me here, I promise there’s gold at the end of the rainbow.</p>
+
+<p>Anyway. You might say “Sure, I’ll use Excel and apply a function to my dataset”. To which I’ll reply “Good luck applying a regular expression to a range”, or, “Good luck reading a nested conditional”, and walk away.</p>
+
+<p>My tool of choice for doing any sort of data munging is PowerShell. The above problem is as simple as follows:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$list | % { $_ -match "(.*)" ; $matches[1] }
+</code></pre>
+</div>
+
+<p>Naturally, you can make that script block do whatever task you want, including be readable. PowerShell 1, Excel 0.</p>
+
+<p>By the way, that little <em>%</em> symbol is actually an alias for <em>Foreach-Object</em>, a cute function/cmdlet that applies your block to every item in your list. Very neat!</p>
+
+<p>Some of you might point out “hey, that’s a map!”. And you would be completely spot on. Although it doesn’t admit it, PowerShell actually has a lot of functional structures that you can take advantage of. Map and filter are practically first-class citizens, with dedicated functions and aliases to perform these operations over lists.</p>
+
+<p>One of the key advantages of functional programming, I find, is the provision of many standard utility functions, with well-understood behaviours, to save you on reimplementing these basic tasks over and over. That and partial application. And a usable type system. Sadly, we don’t get those last two with PowerShell, but we’re in a command shell, not writing F# or Haskell.</p>
+
+<p>So instead of writing this code twenty times a day…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$results = @()
+foreach ($item in $list) {
+  if ($item.property -eq $desiredValue) {
+    $results += $item
+  }
+}
+</code></pre>
+</div>
+
+<p>You can write this!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$list | ? { $_.property -eq $desiredValue }
+</code></pre>
+</div>
+
+<p>Or this!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$list | ? -Property property -eq -Value $desiredValue
+</code></pre>
+</div>
+
+<p>The <em>?</em> symbol is the alias for <em>Where-Object</em>, which is clearly the filter function.</p>
+
+<p>However, one very notable omission is the fold.</p>
+
+<p>Where map is used for applying some function to every item in a list, and filter is used to select every item in a list according to some function, fold basically collapses every item in a list into a single value, according to some function.</p>
+
+<p>Having found it useful in my day to day activities, I have these neat functions lying around.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function foldl {
+    param(
+        $baseValue, $f, $list
+    )
+
+    if ($list.length -gt 1) {
+        foldl $(&amp; $f $baseValue $list[0]) $f $list[1..$($list.length)]
+    } else {
+        &amp; $f $baseValue $list[0]
+    }
+}
+
+function foldr {
+    param($baseValue, $f, $list)
+
+    if ($list.length -gt 0) {
+        &amp; $f $list[0] (foldr -f $f -baseValue $baseValue -list $list[1..($list.length)])
+    } else {
+        $baseValue
+    }
+}
+
+</code></pre>
+</div>
+
+<p>What the heck did I just read, you may ask. Let’s break it down a bit.</p>
+
+<p><em>fold</em> starts off with a base value, and applys its function to every item in the list, “adding” the result to its base value and continuing. The fold-left version works slightly differently to the fold-right version - left will apply the function to the left-most values first, and the right version will apply it from the right. The difference is completely non-existent in PowerShell, so best not to worry about it.</p>
+
+<p>So what do you even use this for? Here’s a simple example that sums a list.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PS /home/kbstarmie&gt; foldl -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)                                                   
+5050
+PS /home/kbstarmie&gt; foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)                                                   
+5050
+
+</code></pre>
+</div>
+
+<p>You’re basically limited by your imagination (and requirements) in folding things. You can use it to check if the property of every object is true, like so.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>foldl -baseValue $true -f {param($1,$2) $1.property -and $2.property} -list $someObjectList
+</code></pre>
+</div>
+
+<p>Obviously, you will need to ensure your objects have the right properties so the system doesn’t complain, but it’s a small price to pay for the convenience of a useful PowerShell helper function!</p>
+
+<p>I appreciate that some of this content might go right over some readers who haven’t been acquainted with functional programming fundamentals. In that case, I wholeheartedly recommend spending an afternoon or evening with <a href="http://learnyouahaskell.com/">Learn You A Haskell For Great Good!</a> to be introduced to the basics. It’s fun, trust me.</p>
+
+<p>Anyway, I just wanted to introduce this small function and I hope that you all find it useful in your day to day data munging, scripting, or whatever! I’ve made a script <a href="https://github.com/kbstarmie/powershell-snippets/blob/master/functions/fold.ps1">available in my PowerShell repository</a> if you’re rushing to apply it to your profile loaded code.</p>
+
+<p>Until next time <em>~Kira</em></p>
+
+
+</div>
+
+
+      </section>
+      <footer>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+
+
+  
+  </body>
+</html>
