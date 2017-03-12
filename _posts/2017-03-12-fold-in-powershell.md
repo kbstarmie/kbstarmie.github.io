@@ -3,11 +3,7 @@ layout: post
 title: Fold in PowerShell
 ---
 
-# {{ page.title }}
-
-Oftentimes, when working with data, you might find yourself needing to process or transform it in some way to continue.
-
-Duh, no kidding, you might say. Are you really writing a blog post about this? Run with me here, I promise there's gold at the end of the rainbow.
+Oftentimes, when working with data, you might find yourself needing to process or transform it in some way to continue. Duh, no kidding, you might say. Are you really writing a blog post about this? Run with me here, I promise there's gold at the end of the rainbow.
 
 Anyway. You might say "Sure, I'll use Excel and apply a function to my dataset". To which I'll reply "Good luck applying a regular expression to a range", or, "Good luck reading a nested conditional", and walk away.
 
