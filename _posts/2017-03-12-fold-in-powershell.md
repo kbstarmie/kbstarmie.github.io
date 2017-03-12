@@ -9,7 +9,7 @@ Anyway. You might say "Sure, I'll use Excel and apply a function to my dataset".
 
 My tool of choice for doing any sort of data munging is PowerShell. The above problem is as simple as follows:
 
-```
+```powershell
 $list | % { $_ -match "(.*)" ; $matches[1] }
 ``` 
 
@@ -23,7 +23,7 @@ One of the key advantages of functional programming, I find, is the provision of
 
 So instead of writing this code twenty times a day...
 
-```
+```powershell
 $results = @()
 foreach ($item in $list) {
   if ($item.property -eq $desiredValue) {
@@ -34,13 +34,13 @@ foreach ($item in $list) {
 
 You can write this!
 
-```
+```powershell
 $list | ? { $_.property -eq $desiredValue }
 ```
 
 Or this!
 
-```
+```powershell
 $list | ? -Property property -eq -Value $desiredValue
 ```
 
@@ -52,7 +52,7 @@ Where map is used for applying some function to every item in a list, and filter
 
 Having found it useful in my day to day activities, I have these neat functions lying around.
 
-```
+```powershell
 function foldl {
     param(
         $baseValue, $f, $list
@@ -83,7 +83,7 @@ function foldr {
 
 So what do you even use this for? Here's a simple example that sums a list.
 
-```
+```powershell
 PS /home/kbstarmie> foldl -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
 5050
 PS /home/kbstarmie> foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
@@ -93,7 +93,7 @@ PS /home/kbstarmie> foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
 
 You're basically limited by your imagination (and requirements) in folding things. You can use it to check if the property of every object is true, like so.
 
-```
+```powershell
 foldl -baseValue $true -f {param($1,$2) $1.property -and $2.property} -list $someObjectList
 ```
 
