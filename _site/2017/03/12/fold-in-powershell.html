@@ -15,7 +15,7 @@
   </head>
   <body style="margin:0; padding: 0;">
   <div style="width:100%; height: 10px; background-color: #C2385F; position: fixed; top: 0;"></div>
-    <div class="wrapper" style="margin-top: 50px;">
+    <div class="wrapper" style="margin-top: 20px;">
       <header>
         <a href=/><h1>Working in IT</h1></a>
         <img src="/assets/picture.jpg" style="height:200px; width:200px; border-radius:100px; margin-bottom: 10px;" alt="Starmie in the deep by chuz0r - http://chuz0r.deviantart.com/art/Starmie-in-the-deep-384047289" />
@@ -39,7 +39,7 @@
 
 <p>My tool of choice for doing any sort of data munging is PowerShell. The above problem is as simple as follows:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$list | % { $_ -match "(.*)" ; $matches[1] }
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nv">$list</span> | % <span class="o">{</span> <span class="nv">$_</span> -match <span class="s2">"(.*)"</span> ; <span class="nv">$matches</span><span class="o">[</span>1] <span class="o">}</span>
 </code></pre>
 </div>
 
@@ -53,24 +53,24 @@
 
 <p>So instead of writing this code twenty times a day…</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$results = @()
-foreach ($item in $list) {
-  if ($item.property -eq $desiredValue) {
-    $results += $item
-  }
-}
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nv">$results</span> <span class="o">=</span> @<span class="o">()</span>
+<span class="k">foreach</span> <span class="o">(</span><span class="nv">$item</span> <span class="k">in</span> <span class="nv">$list</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="nv">$item</span>.property -eq <span class="nv">$desiredValue</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">$results</span> +<span class="o">=</span> <span class="nv">$item</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre>
 </div>
 
 <p>You can write this!</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$list | ? { $_.property -eq $desiredValue }
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nv">$list</span> | ? <span class="o">{</span> <span class="nv">$_</span>.property -eq <span class="nv">$desiredValue</span> <span class="o">}</span>
 </code></pre>
 </div>
 
 <p>Or this!</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$list | ? -Property property -eq -Value $desiredValue
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nv">$list</span> | ? -Property <span class="nb">property</span> -eq -Value <span class="nv">$desiredValue</span>
 </code></pre>
 </div>
 
@@ -82,27 +82,27 @@ foreach ($item in $list) {
 
 <p>Having found it useful in my day to day activities, I have these neat functions lying around.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>function foldl {
-    param(
-        $baseValue, $f, $list
-    )
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="k">function </span>foldl <span class="o">{</span>
+    <span class="k">param</span><span class="o">(</span>
+        <span class="nv">$baseValue</span>, <span class="nv">$f</span>, <span class="nv">$list</span>
+    <span class="o">)</span>
 
-    if ($list.length -gt 1) {
-        foldl $(&amp; $f $baseValue $list[0]) $f $list[1..$($list.length)]
-    } else {
-        &amp; $f $baseValue $list[0]
-    }
-}
+    <span class="k">if</span> <span class="o">(</span><span class="nv">$list</span>.length -gt 1<span class="o">)</span> <span class="o">{</span>
+        foldl <span class="k">$(</span>&amp; <span class="nv">$f</span> <span class="nv">$baseValue</span> <span class="nv">$list</span><span class="o">[</span>0]<span class="k">)</span> <span class="nv">$f</span> <span class="nv">$list</span><span class="o">[</span>1..<span class="k">$(</span><span class="nv">$list</span>.length<span class="k">)</span><span class="o">]</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        &amp; <span class="nv">$f</span> <span class="nv">$baseValue</span> <span class="nv">$list</span><span class="o">[</span>0]
+    <span class="o">}</span>
+<span class="o">}</span>
 
-function foldr {
-    param($baseValue, $f, $list)
+<span class="k">function </span>foldr <span class="o">{</span>
+    <span class="k">param</span><span class="o">(</span><span class="nv">$baseValue</span>, <span class="nv">$f</span>, <span class="nv">$list</span><span class="o">)</span>
 
-    if ($list.length -gt 0) {
-        &amp; $f $list[0] (foldr -f $f -baseValue $baseValue -list $list[1..($list.length)])
-    } else {
-        $baseValue
-    }
-}
+    <span class="k">if</span> <span class="o">(</span><span class="nv">$list</span>.length -gt 0<span class="o">)</span> <span class="o">{</span>
+        &amp; <span class="nv">$f</span> <span class="nv">$list</span><span class="o">[</span>0] <span class="o">(</span>foldr -f <span class="nv">$f</span> -baseValue <span class="nv">$baseValue</span> -list <span class="nv">$list</span><span class="o">[</span>1..<span class="o">(</span><span class="nv">$list</span>.length<span class="o">)])</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="nv">$baseValue</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code></pre>
 </div>
@@ -113,9 +113,9 @@ function foldr {
 
 <p>So what do you even use this for? Here’s a simple example that sums a list.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>PS /home/kbstarmie&gt; foldl -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nb">PS</span> /home/kbstarmie&gt; foldl -baseValue 0 -f <span class="o">{</span><span class="k">param</span><span class="o">(</span><span class="nv">$1</span>,<span class="nv">$2</span><span class="o">)</span> <span class="nv">$1</span> + <span class="nv">$2</span><span class="o">}</span> -list @<span class="o">(</span>1..100<span class="o">)</span>
 5050
-PS /home/kbstarmie&gt; foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
+<span class="nb">PS</span> /home/kbstarmie&gt; foldr -baseValue 0 -f <span class="o">{</span><span class="k">param</span><span class="o">(</span><span class="nv">$1</span>,<span class="nv">$2</span><span class="o">)</span> <span class="nv">$1</span> + <span class="nv">$2</span><span class="o">}</span> -list @<span class="o">(</span>1..100<span class="o">)</span>
 5050
 
 </code></pre>
@@ -123,7 +123,7 @@ PS /home/kbstarmie&gt; foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..1
 
 <p>You’re basically limited by your imagination (and requirements) in folding things. You can use it to check if the property of every object is true, like so.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>foldl -baseValue $true -f {param($1,$2) $1.property -and $2.property} -list $someObjectList
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>foldl -baseValue <span class="nv">$true</span> -f <span class="o">{</span><span class="k">param</span><span class="o">(</span><span class="nv">$1</span>,<span class="nv">$2</span><span class="o">)</span> <span class="nv">$1</span>.property -and <span class="nv">$2</span>.property<span class="o">}</span> -list <span class="nv">$someObjectList</span>
 </code></pre>
 </div>
 

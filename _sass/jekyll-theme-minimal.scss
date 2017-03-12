@@ -3,7 +3,7 @@
 
 body {
   background-color: #fff;
-  padding:50px;
+  padding:20px;
   font: 14px/1.5 "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#727272;
   font-weight:400;
@@ -55,7 +55,8 @@ a:hover small {
 }
 
 .wrapper {
-  width:860px;
+  width:960px;
+  padding:20px;
   margin:0 auto;
 }
 
@@ -171,7 +172,7 @@ header ul a strong {
 }
 
 section {
-  width:500px;
+  width:600px;
   float:right;
   padding-bottom:50px;
 }
