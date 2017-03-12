@@ -77,16 +77,16 @@ function foldr {
 
 ```
 
-What the heck did I just read, you may ask. Let's break it down a bit.
+"What the heck did I just read?!", you may ask. Let's break it down a bit.
 
 *fold* starts off with a base value, and applys its function to every item in the list, "adding" the result to its base value and continuing. The fold-left version works slightly differently to the fold-right version - left will apply the function to the left-most values first, and the right version will apply it from the right. The difference is completely non-existent in PowerShell, so best not to worry about it.
 
 So what do you even use this for? Here's a simple example that sums a list.
 
 ```
-PS /home/kbstarmie> foldl -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)                                                   
+PS /home/kbstarmie> foldl -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
 5050
-PS /home/kbstarmie> foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)                                                   
+PS /home/kbstarmie> foldr -baseValue 0 -f {param($1,$2) $1 + $2} -list @(1..100)
 5050
 
 ```
